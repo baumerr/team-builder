@@ -1,4 +1,4 @@
-const Engineer = require('../lib/Enginner');
+const Engineer = require('../lib/Engineer');
 
 test('creates an engineer object', () => {
     data = {
