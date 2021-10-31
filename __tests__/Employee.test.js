@@ -23,4 +23,37 @@ test('gets employees name', () => {
     const employee = new Employee(data);
 
     expect(employee.getName()).toBe(employee.name);
-})
+});
+
+test('gets employees id', () => {
+    data = {
+        name: 'Randy',
+        id: 1,
+        email: 'randy.baumer@hotmail.com'
+    }
+    const employee = new Employee(data);
+
+    expect(employee.getId()).toBe(employee.id);
+});
+
+test('gets employees email', () => {
+    data = {
+        name: 'Randy',
+        id: 1,
+        email: 'randy.baumer@hotmail.com'
+    }
+    const employee = new Employee(data);
+
+    expect(employee.getEmail()).toBe(employee.email);
+});
+
+test('gets employees role', () => {
+    data = {
+        name: 'Randy',
+        id: 1,
+        email: 'randy.baumer@hotmail.com'
+    }
+    const employee = new Employee(data);
+
+    expect(employee.getRole()).toBe('Employee');
+});
