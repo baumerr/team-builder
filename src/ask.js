@@ -2,8 +2,9 @@ const inquirer = require('inquirer');
 const Engineer = require('../lib/Engineer');
 const Intern = require('../lib/Intern');
 const Manager = require('../lib/Manager');
+const addEmployee = require('../index');
 
-function promptEngineer () {
+function promptEngineer (data) {
     console.log("You've chosen Engineer!");
 }
 
