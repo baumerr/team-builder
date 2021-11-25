@@ -1,10 +1,10 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
+const Engineer = require("./lib/Engineer");
 
 function application() {
-
-  function typeOfEmployee() {
-    return inquirer
+  function typeOfEmployee(employees) {
+    inquirer
       .prompt([
         {
           type: "list",
@@ -22,48 +22,77 @@ function application() {
     // if (listOfEmployees = undefined) {
     //   listOfEmployees = [];
     // }
-    listOfEmployees = ( typeof listOfEmployees != 'undefined' && listOfEmployees instanceof Array ) ? listOfEmployees : [];
-    
-    listOfEmployees.push(data.typeOfUser);
+
+    //listOfEmployees = ( typeof listOfEmployees != 'undefined' && listOfEmployees instanceof Array ) ? listOfEmployees : [];
+
+    //listOfEmployees.push(data.typeOfUser);
     if (data.typeOfUser === "Engineer") {
-      promptEngineer(data, listOfEmployees);
+      promptEngineer();
     } else if (data.typeOfUser === "Intern") {
-      promptIntern(data, listOfEmployees);
+      promptIntern();
     } else if (data.typeOfUser === "Manager") {
-      promptManager(data, listOfEmployees);
+      promptManager();
     }
   }
 
-  function promptEngineer(data, listOfEmployees) {
-    console.log("You've chosen Engineer!");
-    addAnother().then(result => {
-      if(result.confirmAddEmployee) {
-        typeOfEmployee();
-      } else {
-        generatePage(listOfEmployees);
-      };
-    });
+  //name, id, email
+  function promptEngineer() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "What is this Engineer's Name?",
+        },
+        {
+          type: "number",
+          name: "id",
+          message: "What is this Engineer's ID?",
+        },
+        {
+          type: "input",
+          name: "email",
+          message: "What is this Engineer's email?",
+        },
+      ])
+      .then((data) => {
+        //create listOfEmployee's if it does not exist
+        listOfEmployees =
+          typeof listOfEmployees != "undefined" &&
+          listOfEmployees instanceof Array
+            ? listOfEmployees
+            : [];
+
+        listOfEmployees.push(data);
+        addAnother().then((result) => {
+          if (result.confirmAddEmployee) {
+            typeOfEmployee(data);
+          } else {
+            generatePage(listOfEmployees);
+          }
+        });
+      });
   }
 
   function promptIntern(data) {
     console.log("You've chosen Intern!");
-    addAnother().then(result => {
-      if(result.confirmAddEmployee) {
+    addAnother().then((result) => {
+      if (result.confirmAddEmployee) {
         typeOfEmployee();
       } else {
         generatePage(data);
-      };
+      }
     });
   }
 
   function promptManager() {
     console.log("You've chosen Manager!");
-    addAnother().then(result => {
-      if(result.confirmAddEmployee) {
+    addAnother().then((result) => {
+      if (result.confirmAddEmployee) {
         typeOfEmployee();
       } else {
         generatePage(data);
-      };
+      }
     });
   }
 
@@ -78,9 +107,21 @@ function application() {
     ]);
   }
 
-  function generatePage (data) {
-    console.log('Webpage generated!');
-    console.log(data);
+  function generatePage(data) {
+    console.log(data, '1');
+
+    for (i = 0; i < data.length; i++) {
+      engData = {
+        name: data.name,
+        id: data.id,
+        email: data.email,
+      };
+      console.log(engData);
+      var engineer = new Engineer(data);
+    }
+
+    console.log("Webpage generated!");
+    console.log(engineer);
   }
 
   typeOfEmployee();
