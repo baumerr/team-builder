@@ -67,9 +67,13 @@ function application() {
         {
           type: "input",
           name: "email",
-
           message: "What is this Engineer's email?",
         },
+        {
+          type: "input",
+          name: "github",
+          message: "What is this Engineer's GitHub?",
+        }
       ])
       .then((data) => {
 
@@ -77,6 +81,7 @@ function application() {
           name: data.name,
           id: data.id,
           email: data.email,
+          github: data.github
         };
     const engineer = new Engineer(engData);
 
@@ -110,6 +115,11 @@ function application() {
 
           message: "What is this Intern's email?",
         },
+        {
+          type: "input",
+          name: "school",
+          message: "Where did this Intern go to school?",
+        }
       ])
       .then((data) => {
 
@@ -117,6 +127,7 @@ function application() {
           name: data.name,
           id: data.id,
           email: data.email,
+          school: data.school
         };
     const intern = new Intern(intData);
 
@@ -150,6 +161,11 @@ function application() {
 
           message: "What is this Manager's email?",
         },
+        {
+          type: "number",
+          name: "officeNumber",
+          message: "What is this Manager's Office Number?",
+        }
       ])
       .then((data) => {
 
@@ -157,6 +173,7 @@ function application() {
           name: data.name,
           id: data.id,
           email: data.email,
+          officeNumber: data.officeNumber
         };
     const manager = new Manager(manData);
 
@@ -183,8 +200,6 @@ function application() {
   }
 
   function createWebPage(data) {
-    console.log('0', data);
-
     const htmlData = generatePage(data);
 
     writeFile(htmlData);
