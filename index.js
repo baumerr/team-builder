@@ -1,6 +1,27 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
 const Engineer = require("./lib/Engineer");
+const Manager = require('./lib/Manager');
+const Intern = require('./lib/Intern');
+
+const generatePage = require('./src/page-template');
+
+const listOfEmployees = [];
+
+const writeFile = (fileContent) => {
+    return new Promise((resolve, reject) => {
+      fs.writeFile('./dist/index.html', fileContent, (err) => {
+        if(err) {
+          reject(err);
+          return;
+        }
+        resolve({
+          okay: true,
+          message: 'File Created!',
+        });
+      });
+    });
+};
 
 function application() {
   function typeOfEmployee(employees) {
@@ -19,13 +40,7 @@ function application() {
   }
 
   function askForInfo(data) {
-    // if (listOfEmployees = undefined) {
-    //   listOfEmployees = [];
-    // }
 
-    //listOfEmployees = ( typeof listOfEmployees != 'undefined' && listOfEmployees instanceof Array ) ? listOfEmployees : [];
-
-    //listOfEmployees.push(data.typeOfUser);
     if (data.typeOfUser === "Engineer") {
       promptEngineer();
     } else if (data.typeOfUser === "Intern") {
@@ -52,48 +67,108 @@ function application() {
         {
           type: "input",
           name: "email",
+
           message: "What is this Engineer's email?",
         },
       ])
       .then((data) => {
-        //create listOfEmployee's if it does not exist
-        listOfEmployees =
-          typeof listOfEmployees != "undefined" &&
-          listOfEmployees instanceof Array
-            ? listOfEmployees
-            : [];
 
-        listOfEmployees.push(data);
+        engData = {
+          name: data.name,
+          id: data.id,
+          email: data.email,
+        };
+    const engineer = new Engineer(engData);
+
+        listOfEmployees.push(engineer);
         addAnother().then((result) => {
           if (result.confirmAddEmployee) {
             typeOfEmployee(data);
           } else {
-            generatePage(listOfEmployees);
+            createWebPage(listOfEmployees);
           }
         });
       });
   }
 
-  function promptIntern(data) {
-    console.log("You've chosen Intern!");
-    addAnother().then((result) => {
-      if (result.confirmAddEmployee) {
-        typeOfEmployee();
-      } else {
-        generatePage(data);
-      }
-    });
+  function promptIntern() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "What is this Intern's Name?",
+        },
+        {
+          type: "number",
+          name: "id",
+          message: "What is this Intern's ID?",
+        },
+        {
+          type: "input",
+          name: "email",
+
+          message: "What is this Intern's email?",
+        },
+      ])
+      .then((data) => {
+
+        intData = {
+          name: data.name,
+          id: data.id,
+          email: data.email,
+        };
+    const intern = new Intern(intData);
+
+        listOfEmployees.push(intern);
+        addAnother().then((result) => {
+          if (result.confirmAddEmployee) {
+            typeOfEmployee(data);
+          } else {
+            createWebPage(listOfEmployees);
+          }
+        });
+      });
   }
 
   function promptManager() {
-    console.log("You've chosen Manager!");
-    addAnother().then((result) => {
-      if (result.confirmAddEmployee) {
-        typeOfEmployee();
-      } else {
-        generatePage(data);
-      }
-    });
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "What is this Manager's Name?",
+        },
+        {
+          type: "number",
+          name: "id",
+          message: "What is this Manager's ID?",
+        },
+        {
+          type: "input",
+          name: "email",
+
+          message: "What is this Manager's email?",
+        },
+      ])
+      .then((data) => {
+
+        manData = {
+          name: data.name,
+          id: data.id,
+          email: data.email,
+        };
+    const manager = new Manager(manData);
+
+        listOfEmployees.push(manager);
+        addAnother().then((result) => {
+          if (result.confirmAddEmployee) {
+            typeOfEmployee(data);
+          } else {
+            createWebPage(listOfEmployees);
+          }
+        });
+      });
   }
 
   function addAnother() {
@@ -107,62 +182,16 @@ function application() {
     ]);
   }
 
-  function generatePage(data) {
-    console.log(data, '1');
+  function createWebPage(data) {
+    console.log('0', data);
 
-    for (i = 0; i < data.length; i++) {
-      engData = {
-        name: data.name,
-        id: data.id,
-        email: data.email,
-      };
-      console.log(engData);
-      var engineer = new Engineer(data);
-    }
+    const htmlData = generatePage(data);
 
-    console.log("Webpage generated!");
-    console.log(engineer);
+    writeFile(htmlData);
+
   }
 
   typeOfEmployee();
 }
 
 application();
-
-// function addEmployee(listOfEmployees) {
-//   if (!listOfEmployees.people) {
-//     listOfEmployees.people = [];
-//   }
-//   return inquirer
-//     .prompt([
-//       {
-//         type: "list",
-//         name: "typeOfEmployee",
-//         message: "What type of employee would you like to add?",
-//         choices: ["Engineer", "Intern", "Manager"],
-//       },
-//       // put ask for info in between these two questions
-//       {
-//         type: "confirm",
-//         name: "confirmAddEmployee",
-//         message: "Would you like to enter another Employee?",
-//         default: false,
-//       },
-//     ])
-//     .then((answers) => {
-//       listOfEmployees.people.push(answers);
-//       if (answers.confirmAddEmployee) {
-//         return addEmployee(listOfEmployees);
-//       } else {
-//         return listOfEmployees;
-//       }
-//     });
-// }
-
-// askForEmployee()
-//   .then(addEmployee)
-//   .then((answers) => {
-//     console.log(answers);
-//   });
-
-//module.exports = { addEmployee };
